@@ -1,7 +1,7 @@
 # RHIZEL - Loja de Roupas
 
 Projeto desenvolvido para criar uma aplicação web simples de uma loja de roupas, permitindo cadastrar produtos, adicionar fotos, selecionar tamanhos, adicionar produtos ao carrinho e registrar vendas.
-
+Ainda à muito oque melhorar, adicionar mais funcionalidades mas diante mão é isso :)
 O projeto também foi desenvolvido com o objetivo de praticar conceitos de desenvolvimento web, integração com banco de dados e organização de uma aplicação Python.
 
 ## Funcionalidades
