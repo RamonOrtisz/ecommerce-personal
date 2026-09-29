@@ -62,4 +62,4 @@ As imagens são armazenadas na pasta:
 ```text
 static/imagens/
 ```
-![Texto alternativo da imagem](./Captura de tela 2026-09-29 184037.png)
+![loja](./project-img/Captura de tela 2026-09-29 184037.png)
