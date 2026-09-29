@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Compra finalizada | RHIZEL{% endblock %}
+
+{% block content %}
+<div class="success">
+    <div class="success-icon">✓</div>
+    <p class="eyebrow">FINALIZADO</p>
+    <h1>Venda registrada!</h1>
+    <p>Total da venda: <strong>R$ {{ "%.2f"|format(total|float) }}</strong></p>
+    <a class="button" href="{{ url_for('index') }}">Voltar aos produtos</a>
+    <a class="button secondary" href="{{ url_for('vendas') }}">Ver vendas</a>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Carrinho | RHIZEL{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <p class="eyebrow">COMPRA</p>
+        <h1>Meu carrinho</h1>
+    </div>
+</section>
+
+{% if carrinho %}
+<div class="cart">
+    {% for item in carrinho %}
+    <div class="cart-item">
+        {% if item.imagem %}
+            <img src="{{ url_for('static', filename=item.imagem) }}" alt="{{ item.nome }}">
+        {% else %}
+            <div class="no-image">Sem foto</div>
+        {% endif %}
+
+        <div class="cart-info">
+            <h2>{{ item.nome }}</h2>
+            <p>Tamanho: {{ item.tamanho }}</p>
+            <p>Quantidade: {{ item.quantidade }}</p>
+            <strong>R$ {{ "%.2f"|format((item.preco * item.quantidade)|float) }}</strong>
+        </div>
+
+        <a class="remove" href="{{ url_for('remover_carrinho', indice=loop.index0) }}">Remover</a>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="summary">
+    <div><span>Quantidade de itens</span><strong>{{ carrinho|length }}</strong></div>
+    <div><span>Subtotal</span><strong>R$ {{ "%.2f"|format(subtotal|float) }}</strong></div>
+    <div class="total"><span>Total</span><strong>R$ {{ "%.2f"|format(total|float) }}</strong></div>
+
+    <form method="POST" action="{{ url_for('finalizar') }}">
+        <button class="button full" type="submit">Finalizar compra</button>
+    </form>
+</div>
+{% else %}
+<div class="empty">
+    <h2>Seu carrinho está vazio.</h2>
+    <a class="button" href="{{ url_for('index') }}">Ver produtos</a>
+</div>
+{% endif %}
+{% endblock %}

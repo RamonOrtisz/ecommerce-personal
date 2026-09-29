@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar produto | RHIZEL{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <p class="eyebrow">NOVO PRODUTO</p>
+    <h1>Cadastrar produto</h1>
+    <p class="muted">As fotos são escolhidas diretamente do seu computador e salvas na pasta <code>static/imagens</code>.</p>
+
+    {% if mensagem %}
+        <div class="alert">{{ mensagem }}</div>
+    {% endif %}
+
+    <form class="form-card" method="POST" enctype="multipart/form-data">
+        <label for="nome">Nome do produto</label>
+        <input type="text" id="nome" name="nome" placeholder="Ex.: Camiseta Oversized" required>
+
+        <label for="preco">Preço</label>
+        <input type="number" id="preco" name="preco" step="0.01" min="0" placeholder="79.90" required>
+
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" rows="5" placeholder="Descreva a peça..."></textarea>
+
+        <label>Tamanhos disponíveis</label>
+        <div class="checks">
+            {% for tamanho in ["P", "M", "G", "GG", "XG"] %}
+            <label class="check">
+                <input type="checkbox" name="tamanhos" value="{{ tamanho }}">
+                {{ tamanho }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <label>Fotos do produto</label>
+        <p class="muted small">Você pode enviar até 3 fotos. JPG, JPEG, PNG ou WEBP. Limite total da requisição: 8 MB.</p>
+
+        <input type="file" name="imagem1" accept="image/*">
+        <input type="file" name="imagem2" accept="image/*">
+        <input type="file" name="imagem3" accept="image/*">
+
+        <button class="button full" type="submit">Cadastrar produto</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Vendas | RHIZEL{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <p class="eyebrow">ADMINISTRAÇÃO</p>
+        <h1>Relatório de vendas</h1>
+    </div>
+</section>
+
+<div class="stats">
+    <div><span>Vendas</span><strong>{{ quantidade }}</strong></div>
+    <div><span>Total vendido</span><strong>R$ {{ "%.2f"|format(total|float) }}</strong></div>
+</div>
+
+{% if vendas %}
+<div class="sales">
+    {% for venda in vendas %}
+    <article class="sale">
+        <div class="sale-head">
+            <strong>Venda #{{ venda.id }}</strong>
+            <span>{{ venda.data_venda }}</span>
+            <strong>R$ {{ "%.2f"|format(venda.total|float) }}</strong>
+        </div>
+
+        {% for item in venda.itens %}
+        <div class="sale-item">
+            <span>{{ item.nome }}</span>
+            <span>Tamanho {{ item.tamanho }}</span>
+            <span>{{ item.quantidade }}x</span>
+            <strong>R$ {{ "%.2f"|format(item.subtotal|float) }}</strong>
+        </div>
+        {% endfor %}
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+    <h2>Nenhuma venda registrada.</h2>
+</div>
+{% endif %}
+{% endblock %}

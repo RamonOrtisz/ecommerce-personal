@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}RHIZEL | Produtos{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">LOJA RHIZEL</p>
+        <h1>Catálogo de produtos</h1>
+        <p>Cadastre suas peças, escolha as fotos direto do computador e acompanhe as vendas pelo sistema.</p>
+    </div>
+    <a class="button" href="{{ url_for('cadastrar') }}">+ Cadastrar produto</a>
+</section>
+
+{% if produtos %}
+<div class="grid">
+    {% for produto in produtos %}
+    <a class="card" href="{{ url_for('produto', produto_id=produto.id) }}">
+        {% if produto.imagem %}
+            <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}">
+        {% else %}
+            <div class="no-image">Sem foto</div>
+        {% endif %}
+        <div class="card-body">
+            <h2>{{ produto.nome }}</h2>
+            <strong>R$ {{ "%.2f"|format(produto.preco|float) }}</strong>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+    <h2>Nenhum produto cadastrado.</h2>
+    <p>Comece cadastrando sua primeira peça.</p>
+    <a class="button" href="{{ url_for('cadastrar') }}">Cadastrar produto</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RHIZEL{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+    <a class="logo" href="{{ url_for('index') }}">RHIZEL</a>
+    <nav>
+        <a href="{{ url_for('index') }}">Produtos</a>
+        <a href="{{ url_for('cadastrar') }}">Cadastrar</a>
+        <a href="{{ url_for('relatorio') }}">Carrinho</a>
+        <a href="{{ url_for('vendas') }}">Vendas</a>
+    </nav>
+</header>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

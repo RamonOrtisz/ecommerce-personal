@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Caixa | RHIZEL{% endblock %}
+
+{% block content %}
+<div class="success">
+    <p class="eyebrow">CAIXA</p>
+    <h1>Carrinho encerrado</h1>
+    <p>O carrinho temporário foi limpo. Os produtos e as vendas continuam armazenados no MySQL.</p>
+    <a class="button" href="{{ url_for('index') }}">Voltar</a>
+</div>
+{% endblock %}
