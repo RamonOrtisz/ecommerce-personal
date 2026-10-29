@@ -15,9 +15,9 @@
     {% for item in carrinho %}
     <div class="cart-item">
         {% if item.imagem %}
-            <img src="{{ url_for('static', filename=item.imagem) }}" alt="{{ item.nome }}">
+        <img src="{{ url_for('static', filename=item.imagem) }}" alt="{{ item.nome }}">
         {% else %}
-            <div class="no-image">Sem foto</div>
+        <div class="no-image">Sem foto</div>
         {% endif %}
 
         <div class="cart-info">
@@ -37,9 +37,9 @@
     <div><span>Subtotal</span><strong>R$ {{ "%.2f"|format(subtotal|float) }}</strong></div>
     <div class="total"><span>Total</span><strong>R$ {{ "%.2f"|format(total|float) }}</strong></div>
 
-    <form method="POST" action="{{ url_for('finalizar') }}">
-        <button class="button full" type="submit">Finalizar compra</button>
-    </form>
+    <a class="button full" href="{{ url_for('pedido_whatsapp') }}">
+        Finalizar pedido pelo WhatsApp
+    </a>
 </div>
 {% else %}
 <div class="empty">

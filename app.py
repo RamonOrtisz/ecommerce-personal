@@ -3,6 +3,10 @@ from werkzeug.utils import secure_filename
 from pathlib import Path
 from uuid import uuid4
 from decimal import Decimal
+from urllib.parse import quote
+
+
+WHATSAPP_NUMERO = "+5581982013448"
 
 from banco import (
     criar_produto,
@@ -25,6 +29,68 @@ app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
 app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024  # 8 MB por requisição.
 
 EXTENSOES_PERMITIDAS = {"jpg", "jpeg", "png", "webp"}
+
+@app.route("/pedido/whatsapp")
+def pedido_whatsapp():
+
+    # recupera os produtos que estão no carrinho
+    carrinho = session.get("carrinho", [])
+    # não permite gerar um pedido sem produto 
+    if not carrinho:
+        return redirect(url_for("relatorio"))
+    # calcula o total do pedido
+    total = sum(
+        Decimal(str(item["preco"])) * item["quantidade"]
+        for item in carrinho
+    )
+    # começa a montar a mensagem que será enviada.
+    linhas = [
+        "*RHIZEL — PEDIDO DE COMPRA*",
+        "",
+        "Gostaria de fazer um pedido:",
+        "",
+        "----------------------------------",
+    ]
+    # adiciona os dados de cada produto à mensagem.
+    for item in carrinho:
+        preco_unitario = Decimal(str(item["preco"]))
+        quantidade = item["quantidade"]
+        subtotal_item = preco_unitario * quantidade
+
+        linhas.extend([
+            f"*{item['nome']}",
+            f"Tamanho: {item['tamanho']} | Quantidade: {quantidade} un.",
+            f"Valor unitário: R$ {preco_unitario:.2f}".replace(".", "."),
+            f"Subtotal: R$ {subtotal_item:.2f}".replace(".", "."),
+            "----------------------------------",
+        ])
+
+        # fecha a nota com o total e uma mensagem de agradecimento.
+    linhas.extend([
+        "----------------------------------",
+        f"*Total do pedido: R$ {total:.2f}*".replace(".", ","),
+        "",
+        "Aguardo a confirmação do pedido. Obrigado!",
+    ])
+
+        # junta todas as linhas, respeitando as quebras de linha.
+    mensagem = "\n".join(linhas)
+
+        # codifica a mensagem para utilizá-la com segurança na URL.
+    mensagem_codificada = quote(mensagem)
+
+        # monta o endereço que abre a conversa com a mensagem preenchida.
+    link_whatsapp = (
+        f"https://wa.me/{WHATSAPP_NUMERO}"
+        f"?text={mensagem_codificada}"
+    )
+
+    return render_template(
+        "pedido_whatsapp.html",
+        mensagem=mensagem,
+        link_whatsapp=link_whatsapp,
+    )
+
 
 
 def extensao_permitida(nome):
@@ -122,16 +188,30 @@ def adicionar_carrinho(produto_id):
 
     carrinho = session.get("carrinho", [])
 
-    carrinho.append({
-        "produto_id": produto["id"],
-        "nome": produto["nome"],
-        "preco": float(produto["preco"]),
-        "imagem": produto["imagens"][0] if produto["imagens"] else None,
-        "tamanho": tamanho,
-        "quantidade": quantidade,
+    # Procura um item com o mesmo produto e o mesmo tamanho.
+    item_existente = None
+    
+    for item in carrinho:
+        if (
+            item["produto_id"] == produto_id and item["tamanho"] == tamanho
+        ): 
+            item_existente = item
+            break
+        
+    if item_existente:
+        item_existente["quantidade"] += quantidade
+    else:
+        carrinho.append({
+                "produto_id": produto["id"],
+                "nome": produto["nome"],
+                "preco": float(produto["preco"]),
+                "imagem": produto["imagens"][0] if produto["imagens"] else None,
+                "tamanho": tamanho,
+                "quantidade": quantidade,
     })
 
     session["carrinho"] = carrinho
+    session.modified = True
     return redirect(url_for("relatorio"))
 
 

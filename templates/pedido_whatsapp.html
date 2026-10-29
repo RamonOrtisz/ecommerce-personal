@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Nota do pedido | RHIZEL{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <p class="eyebrow">RHIZEL</p>
+        <h1>Nota do pedido</h1>
+        <p>Confira os dados antes de enviar pelo WhatsApp.</p>
+    </div>
+</section>
+
+<div class="summary">
+    <!-- Exibe a nota formatada, mantendo as quebras de linha. -->
+    <pre style="white-space: pre-wrap; overflow-wrap: anywhere;">{{ mensagem }}</pre>
+
+    <!-- Abre o WhatsApp com a mensagem já preenchida. -->
+    <a class="button full" href="{{ link_whatsapp }}" target="_blank" rel="noopener noreferrer">
+        Enviar pedido pelo WhatsApp
+    </a>
+
+    <!-- Permite voltar ao carrinho para fazer alterações. -->
+    <a class="button secondary full" href="{{ url_for('relatorio') }}">
+        Voltar ao carrinho
+    </a>
+</div>
+{% endblock %}
